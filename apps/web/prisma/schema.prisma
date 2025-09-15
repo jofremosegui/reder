@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum PropertyType {
+  ROOM
+  STUDIO
+  APARTMENT
+}
+
+enum Operation {
+  RENT
+}
+
+enum GenderPref {
+  ANY
+  MIXED
+  FEMALE_ONLY
+  MALE_ONLY
+}
+
+model Listing {
+  id               Int          @id @default(autoincrement())
+  title            String
+  description      String
+  priceEur         Int
+  city             String
+  neighborhood     String?
+  address          String?
+  lat              Float?
+  lon              Float?
+  propertyType     PropertyType
+  operation        Operation    @default(RENT)
+  bedrooms         Int?
+  bathrooms        Int?
+  sizeSqm          Int?
+  floor            Int?
+  furnished        Boolean?     @default(true)
+  hasElevator      Boolean?     @default(true)
+  hasBalcony       Boolean?     @default(false)
+  hasAC            Boolean?     @default(false)
+  heating          Boolean?     @default(true)
+  petsAllowed      Boolean?     @default(false)
+  billsIncluded    Boolean?     @default(false)
+  internetIncluded Boolean?     @default(true)
+  depositEur       Int?
+  availableFrom    DateTime?
+  minTermMonths    Int?
+  maxTermMonths    Int?
+  roommates        Int?
+  genderPref       GenderPref?  @default(ANY)
+  source           String?      @default("seed")
+  url              String?
+  imageUrl         String?
+  createdAt        DateTime     @default(now())
+
+  @@index([city, neighborhood])
+  @@index([priceEur])
+  @@index([propertyType])
+}

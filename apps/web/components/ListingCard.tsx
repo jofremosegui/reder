@@ -1,36 +1,37 @@
-"use client";
-import { useState } from "react";
-import { Search } from "lucide-react";
+import Link from "next/link";
 
-type Props = {
-  onSearch: (params: { q?: string; city?: string; min?: string; max?: string }) => void;
+export type Listing = {
+  id: number;
+  title: string;
+  price_eur: number;
+  city: string;
+  url: string;
+  image?: string;
+  neighborhood?: string;
 };
-export default function SearchBar({ onSearch }: Props) {
-  const [q, setQ] = useState("");
-  const [city, setCity] = useState("");
-  const [min, setMin] = useState("");
-  const [max, setMax] = useState("");
+
+export default function ListingCard({ l }: { l: Listing }) {
+  const img = l.image || `https://picsum.photos/seed/reder-${l.id}/600/380`;
 
   return (
-    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-      <input className="rounded-xl border border-slate-200 bg-white/60 px-3 py-2 outline-none
-                        focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900"
-             placeholder="Search title…" value={q} onChange={e=>setQ(e.target.value)} />
-      <input className="rounded-xl border border-slate-200 bg-white/60 px-3 py-2 outline-none
-                        focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900"
-             placeholder="City (e.g. Barcelona)" value={city} onChange={e=>setCity(e.target.value)} />
-      <input className="rounded-xl border border-slate-200 bg-white/60 px-3 py-2 outline-none
-                        focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900"
-             placeholder="Min €" inputMode="numeric" value={min} onChange={e=>setMin(e.target.value)} />
-      <input className="rounded-xl border border-slate-200 bg-white/60 px-3 py-2 outline-none
-                        focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900"
-             placeholder="Max €" inputMode="numeric" value={max} onChange={e=>setMax(e.target.value)} />
-      <button onClick={()=>onSearch({ q, city, min, max })}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-white
-                         hover:bg-slate-800 active:scale-[.99] dark:bg-slate-100 dark:text-slate-900">
-        <Search className="h-4 w-4" />
-        Search
-      </button>
-    </div>
+    <Link href={`/listing/${l.id}`} className="block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition
+                                               dark:border-slate-800 dark:bg-slate-900">
+      <div className="relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={img} alt={l.title} className="h-44 w-full object-cover" />
+      </div>
+      <div className="space-y-1 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="line-clamp-1 text-base font-semibold">{l.title}</h3>
+          <div className="shrink-0 rounded-lg bg-slate-900 px-2 py-1 text-sm font-semibold text-white
+                          dark:bg-slate-100 dark:text-slate-900">
+            {l.price_eur.toLocaleString()} €
+          </div>
+        </div>
+        <p className="text-sm text-slate-500">
+          {l.city}{l.neighborhood ? ` · ${l.neighborhood}` : ""}
+        </p>
+      </div>
+    </Link>
   );
 }

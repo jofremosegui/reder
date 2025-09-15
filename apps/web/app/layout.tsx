@@ -12,8 +12,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                        dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
         <header className="sticky top-0 z-10 border-b border-slate-200/60 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/50 backdrop-blur">
           <div className="container flex items-center justify-between py-3">
-            <h1 className="text-xl font-semibold">Reder</h1>
-            <span className="text-sm text-slate-500">Local MVP</span>
+            <a href="/" className="text-xl font-semibold">Reder</a>
+            <nav className="flex items-center gap-4 text-sm text-slate-500">
+              <a href="/search" className="hover:text-slate-900 dark:hover:text-slate-100">Search</a>
+            </nav>
           </div>
         </header>
         <main className="container py-6">{children}</main>
