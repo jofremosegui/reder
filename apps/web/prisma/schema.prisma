@@ -25,41 +25,62 @@ enum GenderPref {
 }
 
 model Listing {
-  id               Int          @id @default(autoincrement())
-  title            String
-  description      String
-  priceEur         Int
-  city             String
-  neighborhood     String?
-  address          String?
-  lat              Float?
-  lon              Float?
-  propertyType     PropertyType
-  operation        Operation    @default(RENT)
-  bedrooms         Int?
-  bathrooms        Int?
-  sizeSqm          Int?
-  floor            Int?
-  furnished        Boolean?     @default(true)
-  hasElevator      Boolean?     @default(true)
-  hasBalcony       Boolean?     @default(false)
-  hasAC            Boolean?     @default(false)
-  heating          Boolean?     @default(true)
-  petsAllowed      Boolean?     @default(false)
-  billsIncluded    Boolean?     @default(false)
-  internetIncluded Boolean?     @default(true)
-  depositEur       Int?
-  availableFrom    DateTime?
-  minTermMonths    Int?
-  maxTermMonths    Int?
-  roommates        Int?
-  genderPref       GenderPref?  @default(ANY)
-  source           String?      @default("seed")
-  url              String?
-  imageUrl         String?
-  createdAt        DateTime     @default(now())
+  id                Int           @id @default(autoincrement())
+  title             String
+  description       String
+  priceEur          Int
+  city              String
+  neighborhood      String?
+  address           String?
+  lat               Float?
+  lon               Float?
+  propertyType      PropertyType
+  operation         Operation      @default(RENT)
+  bedrooms          Int?
+  bathrooms         Int?
+  sizeSqm           Int?
+  floor             Int?
+  furnished         Boolean?       @default(true)
+  hasElevator       Boolean?       @default(true)
+  hasBalcony        Boolean?       @default(false)
+  hasAC             Boolean?       @default(false)
+  heating           Boolean?       @default(true)
+  petsAllowed       Boolean?       @default(false)
+  billsIncluded     Boolean?       @default(false)
+  internetIncluded  Boolean?       @default(true)
+  depositEur        Int?
+  availableFrom     DateTime?
+  minTermMonths     Int?
+  maxTermMonths     Int?
+  roommates         Int?
+  genderPref        GenderPref?    @default(ANY)
+  source            String?        @default("seed")
+  url               String?
+  imageUrl          String?
+  createdAt         DateTime       @default(now())
+
+  // NEW
+  listerName        String?
+  listerEmail       String?
+  listerPhone       String?
+
+  // relations
+  messages          ContactMessage[]
 
   @@index([city, neighborhood])
   @@index([priceEur])
   @@index([propertyType])
 }
+
+model ContactMessage {
+  id         Int      @id @default(autoincrement())
+  listingId  Int
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  senderName String
+  senderEmail String
+  message    String
+  createdAt  DateTime @default(now())
+
+  @@index([listingId, createdAt])
+}
+
